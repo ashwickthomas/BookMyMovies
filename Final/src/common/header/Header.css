@@ -1,0 +1,53 @@
+.Heading
+{
+background-color: #222;
+    height: 36px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 16px;
+    padding-right: 32px;
+    display: flex;
+    flex-flow: column wrap;
+    align-content: space-between;
+}
+.Logo {
+    background-color: #ff7f7f;
+    height: 35px;
+    animation-name: ckw;
+    animation-duration:8s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes ckw {
+    0% {
+        transform: rotateY(180deg);
+    }
+    100% {
+        transform: rotateY(0deg);
+    }
+}
+.Button1
+{
+    position: absolute;
+    right: 20px;
+    top: 7px;
+
+}
+.Button2
+{
+    position: absolute;
+    right: 20px;
+    top: 7px;
+
+}
+.BookButton
+{
+position: absolute;
+    top:7px;
+    right: 110px;
+
+}
+.modal-lg {
+    max-width: 80%;
+}

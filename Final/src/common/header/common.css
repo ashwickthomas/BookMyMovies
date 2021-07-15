@@ -1,0 +1,22 @@
+.validator-form
+{
+    display: flex;
+    flex-direction: column;
+    padding:5% 20% 10%;
+
+}
+.Login-Button
+{
+    width:fit-content;
+    margin-top: 50px;
+    margin-left: 60px;
+}
+.dispNone {
+    display: none;
+}
+.dispBlock {
+    display: block;
+}
+.red {
+    color: red;
+}

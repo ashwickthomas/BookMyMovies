@@ -1,0 +1,32 @@
+.back
+{
+    margin: 8px 24px 0px;
+    height: 24px;
+    cursor:pointer;
+}
+.detailsGrid
+{
+    display: flex;
+}
+.left
+{
+    width : 20%;
+    margin:16px;
+
+}
+.mid
+{
+    width: 60%;
+    margin:16px;
+
+}
+.right
+{
+    width: 20%;
+    margin:16px;
+
+}
+.artists
+{
+    margin:16px;
+}
