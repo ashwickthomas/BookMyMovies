@@ -44,10 +44,10 @@ export default function Home(props) {
         "releaseDateStart": new Date(),
         "releaseDateEnd"  : new Date()
     })
+    const[filterOn,setFilterOn] = useState(false)
 
-    const genreHandleChange = (event) => {setFilteredMovieGenres(event.target.value);};
-    const actorHandleChange = (event) => {setFilteredActor(event.target.value);};
-    const movieHandleChange = (event)=> {setFilteredMovie(event.target.value);}
+    const genreHandleChange = (event) => {setFilteredMovieGenres(event.target.value);setFilterOn(true)};
+    const actorHandleChange = (event) => {setFilteredActor(event.target.value);setFilterOn(true)};
 
     const inputChangedHandler = (e) => {
         const state = filteredMovie;
@@ -132,13 +132,9 @@ catch (e)
     }
 
     function filterResult (){
-        alert(" Movie Name: "+filteredMovie.movieName+
-            "\n Movie Genre: "+filteredMovieGenres+
-            "\n Movie Artists: "+filteredActor+
-            "\n Release Start Date: "+filteredMovie.releaseDateStart+
-            "\n Release End Date: "+filteredMovie.releaseDateEnd)
-    }
 
+        setFilterOn(true);
+    }
     const {movieName,releaseDateStart,releaseDateEnd} = filteredMovie
 
     return <div onLoad={getDetails}>
@@ -148,7 +144,8 @@ catch (e)
         </div>
         <div className='gridUpcom'>
             <GridList cols={6} style={{flexWrap:'nowrap', width:'100%',}}>
-                {movies.filter(mov=>mov.status != "RELEASED")
+
+                {movies.filter(mov => mov.status != "RELEASED")
                     .map(movie => (
                     <GridListTile key={movie["id"]} style={{border:'1px solid lightGrey'}}>
                         <img src={movie["poster_url"]} alt="image" style={{height:'100%'}}/>
@@ -162,16 +159,28 @@ catch (e)
                 <div className="releaseList">
 
                     <GridList cols ={4} >
-                        {movies.filter(mov=> mov.status === "RELEASED")
+                        {movies.filter(mov => {
+                            if(!filterOn) return mov.status === "RELEASED"
+                            else return (mov.status === "RELEASED" &&
+                                ((mov.title.toLowerCase() === filteredMovie.movieName.toLowerCase()) ||
+                                    (new Date(mov.release_date) >= new Date(filteredMovie.releaseDateStart)
+                                        && new Date(mov.release_date) <= new Date(filteredMovie.releaseDateEnd)) ||
+                                    (mov.genres.every(val => filteredMovieGenres.includes(val))) ||
+                                    (mov.artists
+                                        .map(artist =>(artist["first_name"]+" "+artist["last_name"]))
+                                        .forEach(val1 =>filteredActor.includes(val1)))))
+                        } )
                             .map(movie =>
                             <GridListTile key = {movie["id"]} style={{height:'350px',cursor:"pointer",marginleft:'4px'}}>
                                <Link to={"/movie/"+movie["id"]}>
-                               <img src ={movie["poster_url"]}alt ="image" style={{minWidth:'100%',minHeight:'100%',maxWidth:'100%',maxHeight:'100%'}}/>
+                               <img src ={movie["poster_url"]}alt ="image"
+                                    style={{minWidth:'100%',minHeight:'100%',maxWidth:'100%',maxHeight:'100%'}}/>
                                </Link>
-                                <GridListTileBar title={movie["title"]} subtitle={"Release Date "+new Date(movie.release_date).toDateString()}/>
+                                <GridListTileBar title={movie["title"]}
+                                                 subtitle={"Release Date "+new Date(movie.release_date).toDateString()}/>
                             </GridListTile>
-                        )}
-                        }
+                        )
+                        })}
                     </GridList>
                 </div>
 
@@ -181,7 +190,7 @@ catch (e)
                 <CardHeader title={<Typography variant='h6' style={{color:'cornFlowerBlue',width:'100%'}} >Find Movies By</Typography> } color="theme.palette.primary.light" />
                 <FormControl>
                     <InputLabel htmlFor="movieName" >Movie Name</InputLabel>
-                    <Input id="movieName" name="movieName" aria-describedby="my-helper-text" onChange={inputChangedHandler} />
+                    <Input id="movieName" name="movieName" aria-describedby="my-helper-text" onInput={inputChangedHandler} />
                 </FormControl> <br/>
 
 
@@ -238,7 +247,7 @@ catch (e)
                     />
                 </FormControl> <br/>
             </CardContent>
-                <Button variant="contained" color="primary" name="Apply" style={{minWidth:185,left:35,bottom:30}} onClick={filterResult}>   >Apply</Button>
+                <Button variant="contained" color="primary" name="Apply" style={{minWidth:185,left:35,bottom:30}} onClick={filterResult}>Apply</Button>
             </Card>
         </div>
             </div>
